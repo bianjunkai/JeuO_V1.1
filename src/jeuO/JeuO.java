@@ -20,10 +20,12 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
-/**
- * @author Junkai BIAN
- * 
- */
+/** 
+* @ClassName: JeuO 
+* @Description: TODO
+* @author Junkai BIAN
+*  
+*/
 public class JeuO extends JFrame {
 
 	/**
@@ -38,9 +40,7 @@ public class JeuO extends JFrame {
 	public int eachpointH = (int) (hauteur - 50) / 28;
 	public int eachpointL = (int) (largeur) / 50;
 
-	public String fileadress = (new File(".")).getAbsolutePath(); // Adress of
-																	// the
-																	// fonction
+	public String fileadress = (new File(".")).getAbsolutePath(); // Adress of the fonction
 
 	private ArrayList<Card> Allcards;// We prepare all cards
 
@@ -127,17 +127,17 @@ public class JeuO extends JFrame {
 	// public Record getrecord(){return rec;}
 	// public void setrecord(Record rec){this.rec=rec;}
 
-	protected JPanel Screen; // utiliser pour changer des screen
+	protected JPanel screen; // utiliser pour changer des screen
 
 	public JPanel getScreen() {
-		return Screen;
+		return screen;
 	}
 
 	public void setScreen(JPanel Screen) {
-		this.Screen = Screen;
+		this.screen = Screen;
 	}
 
-	private CardLayout Screenlayout = new CardLayout();
+	private CardLayout screenlayout = new CardLayout();
 
 	// private Image background ; // Image that we will show as the back
 	// public Image getback(){return background;}
@@ -186,9 +186,9 @@ public class JeuO extends JFrame {
 	}
 
 	/* Fonction for create new window of information */
-	public void newinformation(boolean restart) {
-		Screenlayout.show(Screen, "GAME");
-		if (!restart) {
+	public void newinformation(boolean samePlayer, boolean continueGame) {
+		screenlayout.show(screen, "GAME");
+		if (!continueGame) {
 			try {
 				if (!Start) {
 					newgame.removeAll();
@@ -202,19 +202,13 @@ public class JeuO extends JFrame {
 			}
 		} else {
 			newgame.removeAll();
-			infor = new Registre(this, restart);
+			infor = new Registre(this, samePlayer);
 		}
 
 	}
 
-	// /* Fonction for create new part of record*/
-	// public void newRecord()
-	// {
-	// rec = new Record(this);
-	// }
-	//
 	public void changeScreen() {
-		Screenlayout.show(Screen, "CHANGE");
+		screenlayout.show(screen, "CHANGE");
 		;
 	}
 
@@ -235,55 +229,64 @@ public class JeuO extends JFrame {
 		super("!o! V1.0");
 		InitializeCard();
 		/* Part for create Screen */
-		Screen = new JPanel();
-		Screen.setLayout(Screenlayout);
+		screen = new JPanel();
+		screen.setLayout(screenlayout);
 		/* Part of menus */
 		barreMenu = new JMenuBar();
-		JMenu PartMenuBegin = new JMenu("Game");
-		JMenu PartMenuImage = new JMenu("Image");
-		JMenu PartMenuHelp = new JMenu("?");
+		JMenu partMenuBegin = new JMenu("Game");
+		JMenu partMenuImage = new JMenu("Image");
+		JMenu partMenuHelp = new JMenu("?");
 
-		barreMenu.add(PartMenuBegin);
-		barreMenu.add(PartMenuImage);
-		barreMenu.add(PartMenuHelp);
+		barreMenu.add(partMenuBegin);
+		barreMenu.add(partMenuImage);
+		barreMenu.add(partMenuHelp);
 
 		/* MeMu File */
-		JMenuItem BoutonBegin = new JMenuItem("New Game");
-		JMenuItem BoutonRecord = new JMenuItem("Record");
-		JMenuItem BoutonQuit = new JMenuItem("Quit");
+		JMenuItem boutonBegin = new JMenuItem("New Game");
+		JMenuItem boutonContinue = new JMenuItem("Continue");
+		JMenuItem boutonRecord = new JMenuItem("Record");
+		JMenuItem boutonQuit = new JMenuItem("Quit");
 
-		PartMenuBegin.add(BoutonBegin);
-		PartMenuBegin.add(BoutonRecord);
-		PartMenuBegin.add(BoutonQuit);
+		partMenuBegin.add(boutonBegin);
+		partMenuBegin.add(boutonContinue);
+		partMenuBegin.add(boutonRecord);
+		partMenuBegin.add(boutonQuit);
 
 		/* Menu Image */
-		JMenuItem BoutonChange = new JMenuItem("Change Background");
+		JMenuItem boutonChange = new JMenuItem("Change Background");
 
-		PartMenuImage.add(BoutonChange);
+		partMenuImage.add(boutonChange);
 
 		/* Menu Help */
-		JMenuItem BoutonHelp = new JMenuItem("Help");
-		JMenuItem BoutonCR = new JMenuItem("CopyRight");
+		JMenuItem boutonHelp = new JMenuItem("Help");
+		JMenuItem boutonCR = new JMenuItem("CopyRight");
 
-		PartMenuHelp.add(BoutonHelp);
-		PartMenuHelp.add(BoutonCR);
+		partMenuHelp.add(boutonHelp);
+		partMenuHelp.add(boutonCR);
 
 		/**
 		 * Fonctions for every boutons
 		 */
+
 		/*
 		 * Start game : It should be controlled by the buton "New Game" OR
 		 * "Continue"
 		 */
-		/* "Sart" */
-		ActionListener SartGame = new ActionListener() {
+
+		ActionListener sartGame = new ActionListener() {
 			public void actionPerformed(ActionEvent ae) {
-				newinformation(false);
+				newinformation(false, false);
 
 			}
 		};
-		BoutonBegin.addActionListener(SartGame);
+		boutonBegin.addActionListener(sartGame);
 
+		ActionListener continueGame = new ActionListener() {
+			public void actionPerformed(ActionEvent ae) {
+				newinformation(false, true);
+			}
+		};
+		boutonContinue.addActionListener(continueGame);
 		//
 		// ActionListener RecordGame = new ActionListener()
 		// {
@@ -299,14 +302,14 @@ public class JeuO extends JFrame {
 				newChange();
 			}
 		};
-		BoutonChange.addActionListener(Changebackground);
+		boutonChange.addActionListener(Changebackground);
 		//
 		ActionListener Quitter = new ActionListener() {
 			public void actionPerformed(ActionEvent ae) {
 				Quitter();
 			}
 		};
-		BoutonQuit.addActionListener(Quitter);
+		boutonQuit.addActionListener(Quitter);
 
 		WindowAdapter wa = new WindowAdapter() {
 			public void windowClosing(WindowEvent we) {
@@ -316,12 +319,12 @@ public class JeuO extends JFrame {
 		addWindowListener(wa);
 
 		newgame = new Table(this);
-		Screen.add(newgame, "GAME");
+		screen.add(newgame, "GAME");
 
 		changeback = new Change(this);
-		Screen.add(changeback, "CHANGE");
+		screen.add(changeback, "CHANGE");
 
-		add(Screen);
+		add(screen);
 		setVisible(true);
 		setSize(largeur, hauteur - 50);
 		setJMenuBar(barreMenu);

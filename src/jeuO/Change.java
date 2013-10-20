@@ -24,7 +24,7 @@ public class Change extends JPanel{
 	
 	private int[][] zone;
 	
-	private String adress = ".";
+	private String adress = ".//resource";
 	
 	private Image[] imagelibrary;
 	

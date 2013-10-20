@@ -11,10 +11,13 @@ import java.awt.event.MouseListener;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
-/**
- * @author Junkai BIAN
- *
- */
+
+/** 
+* @ClassName: Table 
+* @Description: TODO
+* @author Junkai BIAN
+*  
+*/
 public class Table extends JPanel {
 	
 	/**
@@ -188,7 +191,7 @@ public class Table extends JPanel {
 		    {
 	    		choixContinue = JOptionPane.showConfirmDialog(this,"Congratulations! You win! Do you want to continuer?","WIN",JOptionPane.YES_NO_OPTION);
 		        if(choixContinue == JOptionPane.YES_OPTION)
-		        	JO.newinformation(true);
+		        	JO.newinformation(true,true);
 		        else
 		        	this.removeAll();
 		            this.repaint();
@@ -197,7 +200,7 @@ public class Table extends JPanel {
 		    {
 		        choixContinue = JOptionPane.showConfirmDialog(this,"Sorry! You lost! Do you want to continuer?","Lost",JOptionPane.YES_NO_OPTION);
 		        if(choixContinue == JOptionPane.YES_OPTION)
-		            JO.newinformation(true);
+		            JO.newinformation(false,true);
 		        else
 		        	removeAll();
 		        	repaint();

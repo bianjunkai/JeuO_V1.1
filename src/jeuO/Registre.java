@@ -57,50 +57,50 @@ public class Registre extends JFrame {
 		PrenomPlayer = prenomPlayer;
 	}
 
-	protected int Credit;
+	protected int credit;
 
 	public void setCredit(int Credit) {
-		this.Credit = Credit;
+		this.credit = Credit;
 	}
 
 	public int getCredit() {
-		return Credit;
+		return credit;
 	}
 
-	protected JPanel Nom;
+	protected JPanel name;
 
 	public void setJPanelName(JPanel Nom) {
-		this.Nom = Nom;
+		this.name = Nom;
 	}
 
 	public JPanel getJPanelName() {
-		return this.Nom;
+		return this.name;
 	}
 
-	protected JPanel Prenom;
+	protected JPanel secondName;
 
 	public JPanel getPrenom() {
-		return Prenom;
+		return secondName;
 	}
 
 	public void setPrenom(JPanel prenom) {
-		Prenom = prenom;
+		secondName = prenom;
 	}
 
 	private JPanel information;
 
-	protected JPanel credit;
+	protected JPanel creditPanel;
 
 	public void setCredit(JPanel credit) {
-		this.credit = credit;
+		this.creditPanel = credit;
 	}
 
 	public void setJPanelcredit(JPanel credit) {
-		this.credit = credit;
+		this.creditPanel = credit;
 	}
 
 	public JPanel getJPanelcredit() {
-		return credit;
+		return creditPanel;
 	}
 
 	protected JButton confirms;
@@ -139,38 +139,22 @@ public class Registre extends JFrame {
 		this.card = card;
 	}
 
-	public Registre(JeuO jo) {
-		super("Welcome");
-		jeu = jo;
-		card = new CardLayout(2, 2);
-		container.setLayout(card);
-		container.add("informationofplayer", informationOfNewGame());
-		container.add("creditofplayer", creditOfNewGame());
-		this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-		this.add(container);
-		this.setSize(350, 200);
-		this.setResizable(false);
-		this.setVisible(true);
-	}
-
-	private JPanel informationOfNewGame() {
+	private JPanel informationOfDifferentPlayer() {
 		information = new JPanel();
 		final JLabel ZoneInformation = new JLabel();
-		final JTextField ZoneCredit = new JTextField(20);
-
-		Nom = new JPanel();
+		name = new JPanel();
 		JLabel EnterName = new JLabel("Nom:"); // Enter the name of the player
 		final JTextField ZoneName = new JTextField(20);
 
-		Prenom = new JPanel();
+		secondName = new JPanel();
 		JLabel EnterPrenom = new JLabel("Prenom:");
 		final JTextField zonePrenom = new JTextField(20);
 
-		Nom.add(EnterName);
-		Nom.add(ZoneName);
+		name.add(EnterName);
+		name.add(ZoneName);
 
-		Prenom.add(EnterPrenom);
-		Prenom.add(zonePrenom);
+		secondName.add(EnterPrenom);
+		secondName.add(zonePrenom);
 
 		confirms = new JButton("Confirms");
 
@@ -192,48 +176,53 @@ public class Registre extends JFrame {
 							&& PrenomPlayer.equals(iterator.getPrenom())) {
 						jeu.setCurrentplayer(jeu.getAllplayers().indexOf(
 								iterator));
-						Credit = iterator.getCredit();
+						credit = iterator.getCredit();
 						find = true;
-						ZoneInformation.setText("Your current credit here:");
-						ZoneCredit.setText(Integer.toString(Credit));
+						container.add("creditofplayer",
+								creditOfDifferentPlayer());
 						card.show(container, "creditofplayer");
+
 					}
 				}
 				if (find == false) {
 					ZoneInformation
 							.setText("Welcome New Player! Enter your credit:");
+					container.add("creditofplayer", creditOfDifferentPlayer());
 					card.show(container, "creditofplayer");
+
 				}
 			}
 		};
 
-		information.add(BorderLayout.NORTH, Nom);
-		information.add(BorderLayout.CENTER, Prenom);
+		information.add(BorderLayout.NORTH, name);
+		information.add(BorderLayout.CENTER, secondName);
 		information.add(BorderLayout.SOUTH, confirms);
 		confirms.addActionListener(conf);
 		return information;
 	}
 
-	private JPanel creditOfNewGame() {
-		credit = new JPanel();
+	private JPanel creditOfDifferentPlayer() {
+		creditPanel = new JPanel();
 		final JLabel ZoneInformation = new JLabel();
 		JLabel EnterCredit = new JLabel("Credit:"); // Enter the credit he pays
 		final JTextField ZoneCredit = new JTextField(20);
+		if (find == true) {
+			ZoneInformation.setText("<html><body>Welcome back!<br>"+tmplayer.getPrenom()+"."+tmplayer.getNom()+", Your current credit: </body></html>");
+			ZoneCredit.setText(Integer.toString(credit));
+		}
 
 		confirmCredit = new JButton("Play!");
 
 		ActionListener confcredit = new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				Credit = Integer.parseInt(ZoneCredit.getText());
-				tmplayer.setCredit(Credit);
+
 				if (find == false) {
+					credit = Integer.parseInt(ZoneCredit.getText());
+					tmplayer.setCredit(credit);
 					jeu.getAllplayers().add(tmplayer);
 					jeu.setCurrentplayer(jeu.getAllplayers().size() - 1);
-				} else {
-					jeu.getAllplayers().get(jeu.getCurrentplayer())
-							.setCredit(Credit);
-				}
+				} 
 				jeu.setStart(true);
 				Game currentgame = new Game(jeu);
 				jeu.currentgame = currentgame;
@@ -245,11 +234,11 @@ public class Registre extends JFrame {
 
 		confirmCredit.addActionListener(confcredit);
 
-		credit.add(EnterCredit);
-		credit.add(ZoneCredit);
+		creditPanel.add(EnterCredit);
+		creditPanel.add(ZoneCredit);
 		JPanel CreditFinal = new JPanel();
 		CreditFinal.add(BorderLayout.NORTH, ZoneInformation);
-		CreditFinal.add(BorderLayout.CENTER, credit);
+		CreditFinal.add(BorderLayout.CENTER, creditPanel);
 		CreditFinal.add(BorderLayout.SOUTH, confirmCredit);
 		return CreditFinal;
 	}
@@ -257,24 +246,26 @@ public class Registre extends JFrame {
 	public Registre(JeuO jeuO, boolean samePlayer) throws HeadlessException {
 		super("Welcome");
 		this.jeu = jeuO;
-		find = true;
+		find = false;
 		if (samePlayer) {
 			this.add(continueGameForSamePlayer());
-		} else
-			this.add(continueGameForOtherPlayer());
+		} else {
+			card = new CardLayout(2, 2);
+			container.setLayout(card);
+			container
+					.add("informationofplayer", informationOfDifferentPlayer());
+			this.add(container);
+
+		}
+
 		this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		this.setResizable(false);
 		this.setSize(350, 200);
 		this.setVisible(true);
 	}
 
-	private JPanel continueGameForOtherPlayer() {
-		JPanel test = new JPanel();
-		return test;
-	}
-
 	private JPanel continueGameForSamePlayer() {
-		credit = new JPanel();
+		creditPanel = new JPanel();
 		final JLabel ZoneInformation = new JLabel("Your current credit here:");
 		JLabel EnterCredit = new JLabel("Credit:"); // Enter the credit he pays
 		final JTextField ZoneCredit = new JTextField(20);
@@ -286,9 +277,9 @@ public class Registre extends JFrame {
 		ActionListener confcredit = new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				Credit = Integer.parseInt(ZoneCredit.getText());
+				credit = Integer.parseInt(ZoneCredit.getText());
 				jeu.getAllplayers().get(jeu.getCurrentplayer())
-						.setCredit(Credit);
+						.setCredit(credit);
 				jeu.setStart(true);
 				Game currentgame = new Game(jeu);
 				jeu.currentgame = currentgame;
@@ -300,11 +291,11 @@ public class Registre extends JFrame {
 
 		confirmCredit.addActionListener(confcredit);
 
-		credit.add(EnterCredit);
-		credit.add(ZoneCredit);
+		creditPanel.add(EnterCredit);
+		creditPanel.add(ZoneCredit);
 		JPanel CreditFinal = new JPanel();
 		CreditFinal.add(BorderLayout.NORTH, ZoneInformation);
-		CreditFinal.add(BorderLayout.CENTER, credit);
+		CreditFinal.add(BorderLayout.CENTER, creditPanel);
 		CreditFinal.add(BorderLayout.SOUTH, confirmCredit);
 		return CreditFinal;
 	}

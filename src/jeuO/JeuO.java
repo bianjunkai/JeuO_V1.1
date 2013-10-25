@@ -192,7 +192,7 @@ public class JeuO extends JFrame {
 			try {
 				if (!Start) {
 					newgame.removeAll();
-					infor = new Registre(this);
+					infor = new Registre(this,false);
 				} else
 					JOptionPane.showMessageDialog(this,
 							"Please Finish this game before the new one",

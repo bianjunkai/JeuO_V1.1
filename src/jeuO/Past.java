@@ -76,9 +76,8 @@ public class Past extends JFrame {
 			}
 			add(Show);
 
-			setSize(o.eachpointL * 33, o.eachpointH * 9);
+			setSize(900, 250);
 			setVisible(true);
-			setResizable(false);
 			setAlwaysOnTop(true);
 
 		}
